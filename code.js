@@ -64,7 +64,7 @@ window.onload = function () {
 
       if (target.classList.contains("Delete")) {
         let pos = getCaret();
-        if (pos != textarea.textContent.length) {
+        if (pos != textarea.textContent.lenth) {
           let str = textarea.textContent;
           str = str.slice(0, pos) + str.slice(pos + 1);
           textarea.textContent = str;
@@ -74,11 +74,9 @@ window.onload = function () {
       }
 
       if (target.classList.contains("CapsLock")) {
-        let elementContainers = keyboard.getElementsByClassName('eng');
+        let elementContainers = keyboard.getElementsByClassName(lang);
         switchHiding(elementContainers, capsOn ? "caps" : "caseDown", capsOn ? "caseDown" : "caps");
-        elementContainers = keyboard.getElementsByClassName('ru');
-        switchHiding(elementContainers, capsOn ? "caps" : "caseDown", capsOn ? "caseDown" : "caps");
-
+       
         if (capsOn) {
           target.style.background = '';
         }
@@ -315,18 +313,18 @@ function addFifthRowKeys(lang, row) {
 }
 
 function createKey(lang, keyClass, ruCaseDown, ruCaseUp, ruCaps, ruShiftCaps,
-  engCaseDown, engCaseUp, engCaps, engShiftCaps) {
+  enCaseDown, enCaseUp, enCaps, enShiftCaps) {
   let key = document.createElement("div");
   key.classList.add("keyboard-key", keyClass);
 
-  let engElementsContainer = getEngElementsContainer();
+  let enElementsContainer = getenElementsContainer();
   let ruElementsContainer = getRuElementsContainer();
 
-  let engElements = createElements(engCaseDown, engCaseUp, engCaps, engShiftCaps);
+  let enElements = createElements(enCaseDown, enCaseUp, enCaps, enShiftCaps);
   let ruElements = createElements(ruCaseDown, ruCaseUp, ruCaps, ruShiftCaps);
 
-  addHiddenClassToKey(lang, engElementsContainer, engElements, ruElementsContainer, ruElements);
-  constructKey(key, engElementsContainer, engElements, ruElementsContainer, ruElements);
+  addHiddenClassToKey(lang, enElementsContainer, enElements, ruElementsContainer, ruElements);
+  constructKey(key, enElementsContainer, enElements, ruElementsContainer, ruElements);
 
   return key;
 }
@@ -335,14 +333,14 @@ function createKeyWithTwoValues(lang, keyClass, value1, value2) {
   let key = document.createElement("div");
   key.classList.add("keyboard-key", keyClass);
 
-  let engElementsContainer = getEngElementsContainer();
+  let enElementsContainer = getenElementsContainer();
   let ruElementsContainer = getRuElementsContainer();
 
-  let engElements = createElements(value1, value2, value1, value2);
+  let enElements = createElements(value1, value2, value1, value2);
   let ruElements = createElements(value1, value2, value1, value2);
 
-  addHiddenClassToKey(lang, engElementsContainer, engElements, ruElementsContainer, ruElements);
-  constructKey(key, engElementsContainer, engElements, ruElementsContainer, ruElements);
+  addHiddenClassToKey(lang, enElementsContainer, enElements, ruElementsContainer, ruElements);
+  constructKey(key, enElementsContainer, enElements, ruElementsContainer, ruElements);
 
   return key;
 }
@@ -351,21 +349,21 @@ function createKeyWithSingleValue(lang, keyClass, value) {
   let key = document.createElement("div");
   key.classList.add("keyboard-key", keyClass);
 
-  let engElementsContainer = getEngElementsContainer();
+  let enElementsContainer = getenElementsContainer();
   let ruElementsContainer = getRuElementsContainer();
 
-  let engElements = createElements(value, value, value, value);
+  let enElements = createElements(value, value, value, value);
   let ruElements = createElements(value, value, value, value);
 
-  addHiddenClassToKey(lang, engElementsContainer, engElements, ruElementsContainer, ruElements);
-  constructKey(key, engElementsContainer, engElements, ruElementsContainer, ruElements);
+  addHiddenClassToKey(lang, enElementsContainer, enElements, ruElementsContainer, ruElements);
+  constructKey(key, enElementsContainer, enElements, ruElementsContainer, ruElements);
 
   return key;
 }
 
-function getEngElementsContainer() {
+function getenElementsContainer() {
   let container = document.createElement("span");
-  container.classList.add("eng"); 
+  container.classList.add("en"); 
   return container;
 }
 
@@ -391,11 +389,11 @@ function createElement(className, value, elements) {
   elements.push(element);
 }
 
-function addHiddenClassToKey(lang, engElementsContainer, engElements, ruElementsContainer, ruElements) {
+function addHiddenClassToKey(lang, enElementsContainer, enElements, ruElementsContainer, ruElements) {
   if (lang == 'ru') {
-    engElementsContainer.classList.add("hidden");
-    for (let i in engElements) {
-      engElements[i].classList.add("hidden");
+    enElementsContainer.classList.add("hidden");
+    for (let i in enElements) {
+      enElements[i].classList.add("hidden");
     }
     for (let i in ruElements) {
       if (!ruElements[i].classList.contains("caseDown")) {
@@ -409,24 +407,24 @@ function addHiddenClassToKey(lang, engElementsContainer, engElements, ruElements
     for (let i in ruElements) {
       ruElements[i].classList.add("hidden");
     }
-    for (let i in engElements) {
-      if (!engElements[i].classList.contains("caseDown")) {
-        engElements[i].classList.add("hidden");
+    for (let i in enElements) {
+      if (!enElements[i].classList.contains("caseDown")) {
+        enElements[i].classList.add("hidden");
       }
     }
   }
 }
 
-function constructKey(key, engElementsContainer, engElements, ruElementsContainer, ruElements) {
-  for (let i in engElements) {
-    engElementsContainer.append(engElements[i]);
+function constructKey(key, enElementsContainer, enElements, ruElementsContainer, ruElements) {
+  for (let i in enElements) {
+    enElementsContainer.append(enElements[i]);
   }
 
   for (let i in ruElements) {
     ruElementsContainer.append(ruElements[i]);
   }
 
-  key.append(engElementsContainer);
+  key.append(enElementsContainer);
   key.append(ruElementsContainer);
 }
 
