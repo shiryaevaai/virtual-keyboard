@@ -23,6 +23,20 @@ window.onload = function () {
   addRow(lang, addFourthRowKeys);
   addRow(lang, addFifthRowKeys);
 
+  keyboard.onmousedown = function (event) {
+    let target = event.target.closest(".keyboard-key");
+    if (target !== null) {
+      target.style.background = '#de1f1f';
+    }
+  };
+
+  keyboard.onmouseup = function (event) {
+    let target = event.target.closest(".keyboard-key");
+    if (target !== null) {
+      target.style.background = '';
+    }
+  };
+
   keyboard.onclick = function (event) {
     let target = event.target.closest(".keyboard-key");
     if (target !== null) {
