@@ -58,26 +58,39 @@ window.onload = function () {
 document.addEventListener('keydown', (event) => {
   keysPressed[event.code] = true;
   let key = document.getElementsByClassName(event.code)[0];
-  key.style.background = '#de1f1f';
-  keysPressedStack.push(key);
-  processKeyDown();
-  processKeyPress(key, true);
+  if (key !== null) {
+    key.style.background = '#de1f1f';
+    keysPressedStack.push(key);
+    processKeyDown(event.code, key);
+    processKeyPress(key, true);
+  }
+  
   checkSwitchLang(event);
 });
 
 document.addEventListener('keyup', (event) => {
   let key = keysPressedStack.pop();
-  key.style.background = '';
+  if (key !== null) {
+    key.style.background = '';
+  }
+
   delete this.keysPressed[event.code];
   processKeyUp(event.code);
 
 });
 
-function processKeyDown() {
-  if (keysPressed['ShiftLeft'] || keysPressed['ShiftRight']) {
+function processKeyDown(code, key) {
+  if (code == 'ShiftLeft' || code == 'ShiftRight') {
     switchHiding(notHiddenClass, capsOn ? "shiftCaps" : "caseUp");
     notHiddenClass = capsOn ? "shiftCaps" : "caseUp";
   }
+
+  //if (code == "CapsLock") {
+  //  switchHiding(notHiddenClass, capsOn ? "caseDown" : "caps");
+  //  notHiddenClass = capsOn ? "caseDown" : "caps";
+  //  key.style.background = capsOn ? '' : '#de1f1f';
+  //  capsOn = !capsOn;
+  //}
 }
 
 function processKeyUp(code) {
@@ -129,14 +142,7 @@ function processKeyPress(key, isKeyboardEvent) {
     if (key.classList.contains("CapsLock")) {
       switchHiding(notHiddenClass, capsOn ? "caseDown" : "caps");
       notHiddenClass = capsOn ? "caseDown" : "caps";
-
-      if (capsOn) {
-        key.style.background = '';
-      }
-      else {
-        key.style.background = '#de1f1f';
-      }
-
+      key.style.background = capsOn ? '' : '#de1f1f';
       capsOn = !capsOn;
       return;
     }
@@ -149,13 +155,15 @@ function processKeyPress(key, isKeyboardEvent) {
 
       for (let element of elements) {
         if (!element.classList.contains("hidden")) {
-          symbol = element.innerText;
+          symbol = element.textContent;
+          //console.log(element.textContent.length);
         }
       }
     }
 
     textarea.textContent = textarea.textContent + symbol;
-    console.log(symbol)
+    //console.log(symbol)
+    //console.log(symbol.length);
   }
 }
 
