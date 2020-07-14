@@ -2,8 +2,10 @@
 var textarea;
 var capsOn = false;
 var keysPressed = {};
+var keysPressedStack = [];
 var switchLang = { en: "ru", ru: "en" };
 var lang;
+var notHiddenClass = "caseDown";
 
 window.onload = function () {
   lang = localStorage.getItem('lang');
@@ -28,99 +30,137 @@ window.onload = function () {
   addRow(lang, addFifthRowKeys);
 
   keyboard.onmousedown = function (event) {
-    let target = event.target.closest(".keyboard-key");
-    if (target !== null) {
-      target.style.background = '#de1f1f';
+    let key = event.target.closest(".keyboard-key");
+    if (key !== null) {
+      key.style.background = '#de1f1f';
+      keysPressedStack.push(key);
     }
   };
 
   keyboard.onmouseup = function (event) {
-    let target = event.target.closest(".keyboard-key");
-    if (target !== null) {
-      target.style.background = '';
+    //let target = event.target.closest(".keyboard-key");
+    //if (target !== null) {
+    //  target.style.background = '';
+    //}
+    let key = keysPressedStack.pop();
+    //alert(key.classList);
+    if (key !== null) {
+      key.style.background = '';
     }
   };
 
   keyboard.onclick = function (event) {
-    let target = event.target.closest(".keyboard-key");
-    if (target !== null) {
-      if (target.classList.contains("Tab") ||
-        target.classList.contains("AltRight") ||
-        target.classList.contains("AltLeft") ||
-        target.classList.contains("CtrlRight") ||
-        target.classList.contains("CtrlLeft") ||
-        target.classList.contains("ShiftRight") ||
-        target.classList.contains("ShiftLeft")) {
-        return;
-      }
-
-      if (target.classList.contains("Backspace")) {
-        let pos = getCaret();
-        if (pos > 0) {
-          let str = textarea.textContent;
-          str = str.slice(0, pos - 1) + str.slice(pos);
-          textarea.textContent = str;
-        }
-
-        return;
-      }
-
-      if (target.classList.contains("Delete")) {
-        let pos = getCaret();
-        if (pos != textarea.textContent.lenth) {
-          let str = textarea.textContent;
-          str = str.slice(0, pos) + str.slice(pos + 1);
-          textarea.textContent = str;
-        }
-
-        return;
-      }
-
-      if (target.classList.contains("CapsLock")) {
-        let elementContainers = keyboard.getElementsByClassName(lang);
-        switchHiding(elementContainers, capsOn ? "caps" : "caseDown", capsOn ? "caseDown" : "caps");
-       
-        if (capsOn) {
-          target.style.background = '';
-        }
-        else {
-          target.style.background = '#de1f1f';
-        }
-
-        capsOn = !capsOn;
-        return;
-      }
-
-      let symbol;
-      let langElements = target.childNodes;
-
-      for (let langElement of langElements) {
-        let elements = langElement.getElementsByTagName('span');
-
-        for (let element of elements) {
-          if (!element.classList.contains("hidden")) {
-            symbol = element.innerText;
-          }
-        }
-      }
-
-      textarea.textContent = textarea.textContent + symbol;
-      console.log(symbol)
-    }
+    let key = event.target.closest(".keyboard-key");
+    processKeyPress(key, false);
   };
 };
 
 document.addEventListener('keydown', (event) => {
   keysPressed[event.code] = true;
-
+  let key = document.getElementsByClassName(event.code)[0];
+  key.style.background = '#de1f1f';
+  keysPressedStack.push(key);
+  processKeyDown();
+  processKeyPress(key, true);
   checkSwitchLang(event);
 });
 
 document.addEventListener('keyup', (event) => {
+  let key = keysPressedStack.pop();
+  key.style.background = '';
   delete this.keysPressed[event.code];
+  processKeyUp(event.code);
+
 });
 
-function switchHiding(elementContainers, classToHide, classToShow) {
+function processKeyDown() {
+  if (keysPressed['ShiftLeft'] || keysPressed['ShiftRight']) {
+    switchHiding(notHiddenClass, capsOn ? "shiftCaps" : "caseUp");
+    notHiddenClass = capsOn ? "shiftCaps" : "caseUp";
+  }
+}
+
+function processKeyUp(code) {
+  if (code == 'ShiftLeft' || code =='ShiftRight') {
+    switchHiding(notHiddenClass, capsOn ? "caps" : "caseDown");
+    notHiddenClass = capsOn ? "caps" : "caseDown";
+  }
+}
+
+function processKeyPress(key, isKeyboardEvent) {
+  if (key !== null) {
+    if (key.classList.contains("Tab") ||
+      key.classList.contains("AltRight") ||
+      key.classList.contains("AltLeft") ||
+      key.classList.contains("CtrlRight") ||
+      key.classList.contains("CtrlLeft") ||
+      key.classList.contains("ShiftRight") ||
+      key.classList.contains("ShiftLeft")) {
+      if (isKeyboardEvent) {
+        return;
+      }
+      else {
+        return;
+      }
+    }
+
+    if (key.classList.contains("Backspace")) {
+      let pos = getCaret();
+      if (pos > 0) {
+        let str = textarea.textContent;
+        str = str.slice(0, pos - 1) + str.slice(pos);
+        textarea.textContent = str;
+      }
+
+      return;
+    }
+
+    if (key.classList.contains("Delete")) {
+      let pos = getCaret();
+      if (pos != textarea.textContent.lenth) {
+        let str = textarea.textContent;
+        str = str.slice(0, pos) + str.slice(pos + 1);
+        textarea.textContent = str;
+      }
+
+      return;
+    }
+
+    if (key.classList.contains("CapsLock")) {
+      switchHiding(notHiddenClass, capsOn ? "caseDown" : "caps");
+      notHiddenClass = capsOn ? "caseDown" : "caps";
+
+      if (capsOn) {
+        key.style.background = '';
+      }
+      else {
+        key.style.background = '#de1f1f';
+      }
+
+      capsOn = !capsOn;
+      return;
+    }
+
+    let symbol;
+    let langElements = key.childNodes;
+
+    for (let langElement of langElements) {
+      let elements = langElement.getElementsByTagName('span');
+
+      for (let element of elements) {
+        if (!element.classList.contains("hidden")) {
+          symbol = element.innerText;
+        }
+      }
+    }
+
+    textarea.textContent = textarea.textContent + symbol;
+    console.log(symbol)
+  }
+}
+
+function switchHiding(classToHide, classToShow) {
+  let elementContainers = keyboard.getElementsByClassName(lang);
   for (let elementContainer of elementContainers) {
     let elementToHide = elementContainer.getElementsByClassName(classToHide)[0];
     elementToHide.classList.add("hidden");
@@ -141,25 +181,23 @@ function getCaret() {
 
 function checkSwitchLang(event) {
   if (keysPressed['ControlLeft'] && keysPressed['AltLeft']) {
-
     let elementContainers = keyboard.getElementsByClassName(lang);
     for (let elementContainer of elementContainers) {
-      let elementToHide = elementContainer.getElementsByClassName('caseDown')[0];
+      let elementToHide = elementContainer.getElementsByClassName(notHiddenClass)[0];
       elementToHide.classList.add("hidden");
       elementContainer.classList.add("hidden");
     }
-
 
     lang = switchLang[lang];
 
     elementContainers = keyboard.getElementsByClassName(lang);
     for (let elementContainer of elementContainers) {
-      let elementToHide = elementContainer.getElementsByClassName('caseDown')[0];
+      let elementToHide = elementContainer.getElementsByClassName(notHiddenClass)[0];
       elementToHide.classList.remove("hidden");
       elementContainer.classList.remove("hidden");
     }
 
-    console.log(lang);
+    //console.log(lang);
     localStorage.setItem('lang', lang);
   }
 };
@@ -427,7 +465,7 @@ function addHiddenClassToKey(lang, enElementsContainer, enElements, ruElementsCo
       enElements[i].classList.add("hidden");
     }
     for (let i in ruElements) {
-      if (!ruElements[i].classList.contains("caseDown")) {
+      if (!ruElements[i].classList.contains(notHiddenClass)) {
         ruElements[i].classList.add("hidden");
       }
     }
@@ -439,7 +477,7 @@ function addHiddenClassToKey(lang, enElementsContainer, enElements, ruElementsCo
       ruElements[i].classList.add("hidden");
     }
     for (let i in enElements) {
-      if (!enElements[i].classList.contains("caseDown")) {
+      if (!enElements[i].classList.contains(notHiddenClass)) {
         enElements[i].classList.add("hidden");
       }
     }
