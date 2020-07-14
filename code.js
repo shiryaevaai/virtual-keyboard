@@ -1,5 +1,6 @@
 ﻿var keyboard;
 var textarea;
+var capsOn = false;
 
 window.onload = function () {
   var lang = localStorage.getItem('lang');
@@ -50,6 +51,45 @@ window.onload = function () {
         return;
       }
 
+      if (target.classList.contains("Backspace")) {
+        let pos = getCaret();
+        if (pos > 0) {
+          let str = textarea.textContent;
+          str = str.slice(0, pos - 1) + str.slice(pos);
+          textarea.textContent = str;
+        }
+
+        return;
+      }
+
+      if (target.classList.contains("Delete")) {
+        let pos = getCaret();
+        if (pos != textarea.textContent.length) {
+          let str = textarea.textContent;
+          str = str.slice(0, pos) + str.slice(pos + 1);
+          textarea.textContent = str;
+        }
+
+        return;
+      }
+
+      if (target.classList.contains("CapsLock")) {
+        let elementContainers = keyboard.getElementsByClassName('eng');
+        switchHiding(elementContainers, capsOn ? "caps" : "caseDown", capsOn ? "caseDown" : "caps");
+        elementContainers = keyboard.getElementsByClassName('ru');
+        switchHiding(elementContainers, capsOn ? "caps" : "caseDown", capsOn ? "caseDown" : "caps");
+
+        if (capsOn) {
+          target.style.background = '';
+        }
+        else {
+          target.style.background = '#de1f1f';
+        }
+
+        capsOn = !capsOn;
+        return;
+      }
+
       let symbol;
       let langElements = target.childNodes;
       console.log(langElements);
@@ -69,6 +109,25 @@ window.onload = function () {
     }
   };
 };
+
+function switchHiding(elementContainers, classToHide, classToShow) {
+  for (let elementContainer of elementContainers) {
+    let elementToHide = elementContainer.getElementsByClassName(classToHide)[0];
+    elementToHide.classList.add("hidden");
+    let elementToShow = elementContainer.getElementsByClassName(classToShow)[0];
+    elementToShow.classList.remove("hidden");
+  }
+}
+
+function getCaret() {
+  if ((textarea.selectionStart != null) && (textarea.selectionStart != undefined)) {
+    var position = textarea.selectionStart;
+    return position;
+  }
+  else {
+    return 0;
+  }
+}
 
 let switchLang = function (event) {
   if (event.altKey && event.shiftKey) {
