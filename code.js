@@ -1,10 +1,13 @@
 ﻿var keyboard;
 var textarea;
 var capsOn = false;
+var keysPressed = {};
+var switchLang = { en: "ru", ru: "en" };
+var lang;
 
 window.onload = function () {
-  var lang = localStorage.getItem('lang');
-  if (lang === null) {
+  lang = localStorage.getItem('lang');
+  if (lang === "undefined") {
     lang = 'en';
     localStorage.setItem('lang', lang);
   }
@@ -90,7 +93,6 @@ window.onload = function () {
 
       let symbol;
       let langElements = target.childNodes;
-      console.log(langElements);
 
       for (let langElement of langElements) {
         let elements = langElement.getElementsByTagName('span');
@@ -107,6 +109,16 @@ window.onload = function () {
     }
   };
 };
+
+document.addEventListener('keydown', (event) => {
+  keysPressed[event.code] = true;
+
+  checkSwitchLang(event);
+});
+
+document.addEventListener('keyup', (event) => {
+  delete this.keysPressed[event.code];
+});
 
 function switchHiding(elementContainers, classToHide, classToShow) {
   for (let elementContainer of elementContainers) {
@@ -127,9 +139,28 @@ function getCaret() {
   }
 }
 
-let switchLang = function (event) {
-  if (event.altKey && event.shiftKey) {
-    alert('Ура!');
+function checkSwitchLang(event) {
+  if (keysPressed['ControlLeft'] && keysPressed['AltLeft']) {
+
+    let elementContainers = keyboard.getElementsByClassName(lang);
+    for (let elementContainer of elementContainers) {
+      let elementToHide = elementContainer.getElementsByClassName('caseDown')[0];
+      elementToHide.classList.add("hidden");
+      elementContainer.classList.add("hidden");
+    }
+
+
+    lang = switchLang[lang];
+
+    elementContainers = keyboard.getElementsByClassName(lang);
+    for (let elementContainer of elementContainers) {
+      let elementToHide = elementContainer.getElementsByClassName('caseDown')[0];
+      elementToHide.classList.remove("hidden");
+      elementContainer.classList.remove("hidden");
+    }
+
+    console.log(lang);
+    localStorage.setItem('lang', lang);
   }
 };
 
