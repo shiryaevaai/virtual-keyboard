@@ -1,4 +1,7 @@
-﻿window.onload = function () {
+﻿var keyboard;
+var textarea;
+
+window.onload = function () {
   var lang = localStorage.getItem('lang');
   if (lang === null) {
     lang = 'en';
@@ -10,11 +13,53 @@
   addHeader();
   addTextarea();
   addKeyboardContainer();
+
+  keyboard = document.getElementsByClassName("keyboard")[0];
+  textarea = document.getElementsByName("Details")[0];
+
   addRow(lang, addFirstRowKeys);
   addRow(lang, addSecondRowKeys);
   addRow(lang, addThirdRowKeys);
   addRow(lang, addFourthRowKeys);
   addRow(lang, addFifthRowKeys);
+
+  keyboard.onclick = function (event) {
+    let target = event.target;
+    if (target.classList.contains("keyboard-key")) {
+      if (target.classList.contains("Tab") ||
+        target.classList.contains("AltRight") ||
+        target.classList.contains("AltLeft") ||
+        target.classList.contains("CtrlRight") ||
+        target.classList.contains("CtrlLeft") ||
+        target.classList.contains("ShiftRight") ||
+        target.classList.contains("ShiftLeft")) {
+        return;
+      }
+
+      let symbol;
+      let langElements = target.childNodes;
+      console.log(langElements);
+
+      for (let langElement of langElements) {
+        let elements = langElement.getElementsByTagName('span');
+
+        for (let element of elements) {
+          if (!element.classList.contains("hidden")) {
+            symbol = element.innerText;
+          }
+        }
+      }
+
+      textarea.textContent = textarea.textContent + symbol;
+      console.log(symbol)
+    }
+  };
+};
+
+let switchLang = function (event) {
+  if (event.altKey && event.shiftKey) {
+    alert('Ура!');
+  }
 };
 
 function addSection() {
@@ -51,12 +96,12 @@ function addRow(lang, addKeys) {
   let row = document.createElement("div");
   row.classList.add("keyboard-row");
   addKeys(lang, row);
-  let keyboard = document.getElementsByClassName("keyboard")[0];;
+  //let keyboard = document.getElementsByClassName("keyboard")[0];
   keyboard.append(row);
 }
 
 function addFirstRowKeys(lang, row) {
-  let backquote = createKey(lang, "Backquote", "`", "~", "`", "~", "ё", "Ё", "Ё", "ё");
+  let backquote = createKey(lang, "Backquote", "ё", "Ё", "Ё", "ё", "`", "~", "`", "~");
   row.append(backquote);
   let digit1 = createKeyWithTwoValues(lang, "Digit1", "1", "!");
   row.append(digit1);
@@ -182,7 +227,7 @@ function addFifthRowKeys(lang, row) {
   row.append(ctrlLeft);
   let altLeft = createKeyWithSingleValue(lang, "AltLeft", "Alt");
   row.append(altLeft);
-  let space = createKeyWithSingleValue(lang, "Space", "");
+  let space = createKeyWithSingleValue(lang, "Space", " ");
   row.append(space);
   let altRight = createKeyWithSingleValue(lang, "AltRight", "Alt");
   row.append(altRight);
