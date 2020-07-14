@@ -149,9 +149,51 @@ function addThirdRowKeys(lang, row) {
 }
 
 function addFourthRowKeys(lang, row) {
+  let shiftLeft = createKeyWithSingleValue(lang, "ShiftLeft", "Shift");
+  row.append(shiftLeft);
+  let keyZ = createKey(lang, "KeyZ", "я", "Я", "Я", "я", "z", "Z", "Z", "z");
+  row.append(keyZ);
+  let keyX = createKey(lang, "KeyX", "ч", "Ч", "Ч", "ч", "x", "X", "X", "x");
+  row.append(keyX);
+  let keyC = createKey(lang, "KeyC", "с", "С", "С", "с", "c", "C", "C", "c");
+  row.append(keyC);
+  let keyV = createKey(lang, "KeyV", "м", "М", "М", "м", "v", "V", "V", "v");
+  row.append(keyV);
+  let keyB = createKey(lang, "KeyB", "и", "И", "И", "и", "b", "B", "B", "b");
+  row.append(keyB);
+  let keyN = createKey(lang, "KeyN", "т", "Т", "Т", "т", "n", "N", "N", "n");
+  row.append(keyN);
+  let keyM = createKey(lang, "KeyM", "ь", "Ь", "Ь", "ь", "m", "M", "M", "m");
+  row.append(keyM);
+  let сomma = createKey(lang, "Comma", "б", "Б", "Б", "б", ",", "&lt;", ",", "&lt;");
+  row.append(сomma);
+  let period = createKey(lang, "Period", "ю", "Ю", "Ю", "ю", ".", "&gt;", ".", "&gt;");
+  row.append(period);
+  let slash = createKey(lang, "Slash", ".", ",", ".", ",", "/", "?", "/", "?");
+  row.append(slash);
+  let arrowUp = createKeyWithSingleValue(lang, "ArrowUp", "▲");
+  row.append(arrowUp);
+  let shiftRight = createKeyWithSingleValue(lang, "ShiftRight", "Shift");
+  row.append(shiftRight);
 }
 
 function addFifthRowKeys(lang, row) {
+  let ctrlLeft = createKeyWithSingleValue(lang, "CtrlLeft", "Ctrl");
+  row.append(ctrlLeft);
+  let altLeft = createKeyWithSingleValue(lang, "AltLeft", "Alt");
+  row.append(altLeft);
+  let space = createKeyWithSingleValue(lang, "Space", "");
+  row.append(space);
+  let altRight = createKeyWithSingleValue(lang, "AltRight", "Alt");
+  row.append(altRight);
+  let arrowLeft = createKeyWithSingleValue(lang, "ArrowLeft", "◄");
+  row.append(arrowLeft);
+  let arrowDown = createKeyWithSingleValue(lang, "ArrowDown", "▼");
+  row.append(arrowDown);
+  let arrowRight = createKeyWithSingleValue(lang, "ArrowRight", "►");
+  row.append(arrowRight);
+  let ctrlRight = createKeyWithSingleValue(lang, "CtrlRight", "Ctrl");
+  row.append(ctrlRight);
 }
 
 function createKey(lang, keyClass, ruCaseDown, ruCaseUp, ruCaps, ruShiftCaps,
