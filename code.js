@@ -24,8 +24,8 @@ window.onload = function () {
   addRow(lang, addFifthRowKeys);
 
   keyboard.onclick = function (event) {
-    let target = event.target;
-    if (target.classList.contains("keyboard-key")) {
+    let target = event.target.closest(".keyboard-key");
+    if (target !== null) {
       if (target.classList.contains("Tab") ||
         target.classList.contains("AltRight") ||
         target.classList.contains("AltLeft") ||
