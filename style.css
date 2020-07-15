@@ -445,7 +445,7 @@ header, .text-container, .keyboard-container {
 .Digit9, .Digit0, .Minus, .Equal, .KeyQ, .KeyW, .KeyE, .KeyR, .KeyT, .KeyY,
 .KeyU, .KeyI, .KeyO, .KeyP, .BracketLeft, .BracketRight, .Backslash, .Delete, .KeyA, .KeyS, .KeyD,
 .KeyF, .KeyG, .KeyH, .KeyJ, .KeyK, .KeyL, .Semicolon, .Quote, .KeyZ, .KeyX, .KeyC, .KeyV, .KeyB, .KeyN,
-.KeyM, .Comma, .Period, .Slash, .ArrowUp, .CtrlLeft, .CtrlRight, .AltLeft, .AltRight, .ArrowLeft,
+.KeyM, .Comma, .Period, .Slash, .ArrowUp, .ControlLeft, .ControlRight, .AltLeft, .AltRight, .ArrowLeft,
 .ArrowDown, .ArrowRight, .KeyN, .KeyN {
 	width: 40px;
 }
@@ -466,7 +466,7 @@ header, .text-container, .keyboard-container {
 	width: 372px;
 }
 
-.Backspace, .Delete, .Enter, .ShiftRight, .CtrlRight {
+.Backspace, .Delete, .Enter, .ShiftRight, .ControlRight {
 	margin: 0;
 }
 
