@@ -35,23 +35,24 @@ window.onload = function () {
     if (key !== null && key !== undefined) {
       key.style.background = '#de1f1f';
       keysPressedStack.push(key);
+      processKeyDown(key.classList[1], key);
     }
   };
 
-  keyboard.onmouseup = function (event) {
+ // keyboard.onmouseup = function (event) {
     //let target = event.target.closest(".keyboard-key");
     //if (target !== null) {
     //  target.style.background = '';
     //}
-    let key = keysPressedStack.pop();
+    //let key = keysPressedStack.pop();
     //alert(key.classList);
-    if (key !== null && key !== undefined) {
-      key.style.background = '';
-    }
-  };
+    //if (key !== null && key !== undefined) {
+    //  key.style.background = '';
+    //}
+  //};
 
-  keyboard.onclick = function (event) {
-    let key = event.target.closest(".keyboard-key");
+  keyboard.onmouseup = function (event) {
+    let key = keysPressedStack.pop();
     processKeyPress(key, false);
   };
 };
@@ -80,6 +81,18 @@ document.addEventListener('keyup', (event) => {
 
 });
 
+function processMouseUp(key) {
+  console.log("processMouseUp");
+  console.log(key);
+  //alert(key.classList);
+  if (key !== null && key !== undefined) {
+    key.style.background = '';
+    //alert(key.style.background);
+  }
+  console.log(key);
+  processKeyUp(key.classList[1], key);
+};
+
 function processKeyDown(code, key) {
   if (code == 'ShiftLeft' || code == 'ShiftRight') {
     switchHiding(notHiddenClass, capsOn ? "shiftCaps" : "caseUp");
@@ -103,19 +116,16 @@ function processKeyUp(code) {
 
 function processKeyPress(key, isKeyboardEvent) {
   if (key !== null && key !== undefined) {
-    if (key.classList.contains("Tab") ||
-      key.classList.contains("AltRight") ||
+    if (key.classList.contains("AltRight") ||
       key.classList.contains("AltLeft") ||
       key.classList.contains("ControlRight") ||
       key.classList.contains("ControlLeft") ||
       key.classList.contains("ShiftRight") ||
       key.classList.contains("ShiftLeft")) {
-      if (isKeyboardEvent) {
-        return;
+      if (!isKeyboardEvent) {
+        processMouseUp(key);
       }
-      else {
-        return;
-      }
+      return;
     }
 
     if (key.classList.contains("Backspace")) {
@@ -125,7 +135,9 @@ function processKeyPress(key, isKeyboardEvent) {
         str = str.slice(0, pos - 1) + str.slice(pos);
         textarea.textContent = str;
       }
-
+      if (!isKeyboardEvent) {
+        processMouseUp(key);
+      }
       return;
     }
 
@@ -136,7 +148,9 @@ function processKeyPress(key, isKeyboardEvent) {
         str = str.slice(0, pos) + str.slice(pos + 1);
         textarea.textContent = str;
       }
-
+      if (!isKeyboardEvent) {
+        processMouseUp(key);
+      }
       return;
     }
 
@@ -145,19 +159,43 @@ function processKeyPress(key, isKeyboardEvent) {
       notHiddenClass = capsOn ? "caseDown" : "caps";
       key.style.background = capsOn ? '' : '#de1f1f';
       capsOn = !capsOn;
+
+      if (!isKeyboardEvent) {
+        processMouseUp(key);
+      }
+
       return;
     }
 
+    if (key.classList.contains("Tab")) {
+      let pos = getCaret();
+      console.log(pos);
+      let str = textarea.textContent;
+      let beforeText = str.substr(0, pos);
+      let afterText = str.substr(pos);
+
+      textarea.textContent = beforeText + "    " + afterText;
+      textarea.focus();
+      let temp = beforeText + "    ";
+      textarea.setSelectionRange(temp.length, temp.length);
+      if (!isKeyboardEvent) {
+        processMouseUp(key);
+      }
+      return;
+    }
+
+
     if (key.classList.contains("Enter")) {
       let pos = getCaret();
-
+      console.log(pos);
       let str = textarea.textContent;
       let beforeText = str.substr(0, pos);
       let afterText = str.substr(pos);
 
       textarea.textContent = beforeText + '\n' + afterText;
       textarea.focus();
-      textarea.setSelectionRange(pos, pos);
+      let temp = beforeText + '\n';
+      textarea.setSelectionRange(temp.length, temp.length);
 
       if (!isKeyboardEvent) {
         processMouseUp(key);
@@ -179,7 +217,20 @@ function processKeyPress(key, isKeyboardEvent) {
       }
     }
 
-    textarea.textContent = textarea.textContent + symbol;
+    let pos = getCaret();
+    console.log(pos);
+    let str = textarea.textContent;
+    let beforeText = str.substr(0, pos);
+    let afterText = str.substr(pos);
+
+    textarea.textContent = beforeText + symbol + afterText;
+    textarea.focus();
+    let temp = beforeText + symbol;
+    textarea.setSelectionRange(temp.length, temp.length);
+
+    if (!isKeyboardEvent) {
+      processMouseUp(key);
+    }
     //console.log(symbol)
     //console.log(symbol.length);
   }
