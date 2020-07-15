@@ -84,7 +84,7 @@ document.addEventListener('keyup', (event) => {
   }
 
   delete this.keysPressed[event.code];
-  processKeyUp(event.code);
+  processKeyUp(event.code, key);
 
 });
 
@@ -100,6 +100,17 @@ function processMouseUp(key) {
   processKeyUp(key.classList[1], key);
 };
 
+function processKeyUp(code, key) {
+  if (code == 'ShiftLeft' || code == 'ShiftRight') {
+    switchHiding(notHiddenClass, capsOn ? "caps" : "caseDown");
+    notHiddenClass = capsOn ? "caps" : "caseDown";
+  }
+
+  if (code == 'CapsLock' && key !== null && key !== undefined) {
+    key.style.background = capsOn ? '#de1f1f' : '';
+  }
+}
+
 function processKeyDown(code, key) {
   if (code == 'ShiftLeft' || code == 'ShiftRight') {
     switchHiding(notHiddenClass, capsOn ? "shiftCaps" : "caseUp");
@@ -112,13 +123,6 @@ function processKeyDown(code, key) {
   //  key.style.background = capsOn ? '' : '#de1f1f';
   //  capsOn = !capsOn;
   //}
-}
-
-function processKeyUp(code) {
-  if (code == 'ShiftLeft' || code == 'ShiftRight') {
-    switchHiding(notHiddenClass, capsOn ? "caps" : "caseDown");
-    notHiddenClass = capsOn ? "caps" : "caseDown";
-  }
 }
 
 function processKeyPress(key, isKeyboardEvent) {
@@ -172,7 +176,7 @@ function processKeyPress(key, isKeyboardEvent) {
       key.style.background = capsOn ? '' : '#de1f1f';
       capsOn = !capsOn;
 
-      if (!isKeyboardEvent) {
+      if (!isKeyboardEvent && !capsOn) {
         processMouseUp(key);
       }
 
