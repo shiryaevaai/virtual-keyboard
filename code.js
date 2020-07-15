@@ -31,6 +31,7 @@ window.onload = function () {
   addDescriptionContainer();
 
   keyboard.onmousedown = function (event) {
+    event.preventDefault();
     let key = event.target.closest(".keyboard-key");
     if (key !== null && key !== undefined) {
       key.style.background = '#de1f1f';
@@ -58,6 +59,7 @@ window.onload = function () {
 };
 
 document.addEventListener('keydown', (event) => {
+  event.preventDefault();
   keysPressed[event.code] = true;
   let key = document.getElementsByClassName(event.code)[0];
   if (key !== null && key !== undefined) {
@@ -132,8 +134,10 @@ function processKeyPress(key, isKeyboardEvent) {
       let pos = getCaret();
       if (pos > 0) {
         let str = textarea.textContent;
-        str = str.slice(0, pos - 1) + str.slice(pos);
+        let temp = str.slice(0, pos);
+        str = temp + str.slice(pos);
         textarea.textContent = str;
+        textarea.setSelectionRange(temp.length, temp.length);
       }
       if (!isKeyboardEvent) {
         processMouseUp(key);
@@ -145,8 +149,11 @@ function processKeyPress(key, isKeyboardEvent) {
       let pos = getCaret();
       if (pos != textarea.textContent.lenth) {
         let str = textarea.textContent;
-        str = str.slice(0, pos) + str.slice(pos + 1);
+        let temp = str.slice(0, pos);
+        str = temp + str.slice(pos + 1);
         textarea.textContent = str;
+
+        textarea.setSelectionRange(temp.length, temp.length);
       }
       if (!isKeyboardEvent) {
         processMouseUp(key);
@@ -175,7 +182,7 @@ function processKeyPress(key, isKeyboardEvent) {
       let afterText = str.substr(pos);
 
       textarea.textContent = beforeText + "    " + afterText;
-      textarea.focus();
+      //textarea.focus();
       let temp = beforeText + "    ";
       textarea.setSelectionRange(temp.length, temp.length);
       if (!isKeyboardEvent) {
@@ -183,7 +190,6 @@ function processKeyPress(key, isKeyboardEvent) {
       }
       return;
     }
-
 
     if (key.classList.contains("Enter")) {
       let pos = getCaret();
@@ -193,7 +199,7 @@ function processKeyPress(key, isKeyboardEvent) {
       let afterText = str.substr(pos);
 
       textarea.textContent = beforeText + '\n' + afterText;
-      textarea.focus();
+      //textarea.focus();
       let temp = beforeText + '\n';
       textarea.setSelectionRange(temp.length, temp.length);
 
@@ -224,8 +230,9 @@ function processKeyPress(key, isKeyboardEvent) {
     let afterText = str.substr(pos);
 
     textarea.textContent = beforeText + symbol + afterText;
-    textarea.focus();
+    
     let temp = beforeText + symbol;
+    //textarea.focus();
     textarea.setSelectionRange(temp.length, temp.length);
 
     if (!isKeyboardEvent) {
