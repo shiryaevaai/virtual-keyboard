@@ -35,116 +35,87 @@ window.onload = function () {
     if (key !== null) {
       key.style.background = '#de1f1f';
       keysPressedStack.push(key);
-      console.log("onmousedown");
-      console.log(key);
-      processKeyDown(key.classList[1], key);
     }
   };
 
-  //keyboard.onmouseup = function (event) {
- //function processMouseUp () {
- //   let key = keysPressedStack.pop();
- //   //alert(key.classList);
- //   if (key !== null) {
- //     key.style.background = '';
- //   }
- //   processKeyUp(key.classList[1]);
- // };
-
   keyboard.onmouseup = function (event) {
+    //let target = event.target.closest(".keyboard-key");
+    //if (target !== null) {
+    //  target.style.background = '';
+    //}
     let key = keysPressedStack.pop();
+    //alert(key.classList);
+    if (key !== null) {
+      key.style.background = '';
+    }
+  };
+
+  keyboard.onclick = function (event) {
+    let key = event.target.closest(".keyboard-key");
     processKeyPress(key, false);
   };
 };
 
 document.addEventListener('keydown', (event) => {
-  if (event.code == "Backspace" || event.code == "Delete") {
-    event.preventDefault();
-  }
-
+  keysPressed[event.code] = true;
   let key = document.getElementsByClassName(event.code)[0];
-  if (key !== null && key !== undefined) {
+  if (key !== null) {
     key.style.background = '#de1f1f';
-
-    if (!this.keysPressed[event.code]) {
-      keysPressedStack.push(key);
-      keysPressed[event.code] = true;
-    }
-
+    keysPressedStack.push(key);
     processKeyDown(event.code, key);
     processKeyPress(key, true);
   }
-  
+
   checkSwitchLang(event);
 });
 
 document.addEventListener('keyup', (event) => {
   let key = keysPressedStack.pop();
-  if (key !== null && key !== undefined) {
+  if (key !== null) {
     key.style.background = '';
   }
 
   delete this.keysPressed[event.code];
-  processKeyUp(event.code, key);
+  processKeyUp(event.code);
+
 });
 
-function processMouseUp(key) {
-  console.log("processMouseUp");
-  console.log(key);
-  //alert(key.classList);
-  if (key !== null && key !== undefined) {
-    key.style.background = '';
-
-
-    //alert(key.style.background);
-
-  }
- 
-  console.log(key);
-  processKeyUp(key.classList[1], key);
-};
-
-function processKeyDown(code) {
+function processKeyDown(code, key) {
   if (code == 'ShiftLeft' || code == 'ShiftRight') {
     switchHiding(notHiddenClass, capsOn ? "shiftCaps" : "caseUp");
     notHiddenClass = capsOn ? "shiftCaps" : "caseUp";
   }
+
+  //if (code == "CapsLock") {
+  //  switchHiding(notHiddenClass, capsOn ? "caseDown" : "caps");
+  //  notHiddenClass = capsOn ? "caseDown" : "caps";
+  //  key.style.background = capsOn ? '' : '#de1f1f';
+  //  capsOn = !capsOn;
+  //}
 }
 
-function processKeyUp(code, key) {
-  if (code == 'ShiftLeft' || code =='ShiftRight') {
+function processKeyUp(code) {
+  if (code == 'ShiftLeft' || code == 'ShiftRight') {
     switchHiding(notHiddenClass, capsOn ? "caps" : "caseDown");
     notHiddenClass = capsOn ? "caps" : "caseDown";
-  }
-
-  if (code == 'CapsLock' && key !== null && key !== undefined) {
-    key.style.background = capsOn ? '#de1f1f' : '';
   }
 }
 
 function processKeyPress(key, isKeyboardEvent) {
-  if (key !== null && key !== undefined) {
-    console.log("processKeyPress");
-    console.log(key);
-    if (key.classList.contains("AltRight") ||
+  if (key !== null) {
+    if (key.classList.contains("Tab") ||
+      key.classList.contains("AltRight") ||
       key.classList.contains("AltLeft") ||
       key.classList.contains("ControlRight") ||
       key.classList.contains("ControlLeft") ||
       key.classList.contains("ShiftRight") ||
       key.classList.contains("ShiftLeft")) {
-        if (!isKeyboardEvent) {
-          processMouseUp(key);
-        }
-
+      if (isKeyboardEvent) {
         return;
       }
-
-    if (key.classList.contains("Tab")) {
-      textarea.textContent = textarea.textContent + "    ";
-      if (!isKeyboardEvent) {
-        processMouseUp(key);
+      else {
+        return;
       }
-      return;
     }
 
     if (key.classList.contains("Backspace")) {
@@ -153,29 +124,19 @@ function processKeyPress(key, isKeyboardEvent) {
         let str = textarea.textContent;
         str = str.slice(0, pos - 1) + str.slice(pos);
         textarea.textContent = str;
-        textarea.focus();
-        textarea.setSelectionRange(pos - 1, pos - 1);
       }
 
-      if (!isKeyboardEvent) {
-        processMouseUp(key);
-      }
       return;
     }
 
     if (key.classList.contains("Delete")) {
       let pos = getCaret();
-      if (pos != textarea.textContent.length) {
+      if (pos != textarea.textContent.lenth) {
         let str = textarea.textContent;
         str = str.slice(0, pos) + str.slice(pos + 1);
         textarea.textContent = str;
-        textarea.focus();
-        textarea.setSelectionRange(pos, pos);
       }
 
-      if (!isKeyboardEvent) {
-        processMouseUp(key);
-      }
       return;
     }
 
@@ -184,27 +145,6 @@ function processKeyPress(key, isKeyboardEvent) {
       notHiddenClass = capsOn ? "caseDown" : "caps";
       key.style.background = capsOn ? '' : '#de1f1f';
       capsOn = !capsOn;
-
-      if (!isKeyboardEvent && !capsOn) {
-        processMouseUp(key);
-      }
-      return;
-    }
-
-    if (key.classList.contains("Enter")) {
-      let pos = getCaret();
-      
-      let str = textarea.textContent;
-      let beforeText = str.substr(0, pos);
-      let afterText = str.substr(pos);
-
-      textarea.textContent = beforeText + '\n' + afterText;
-      textarea.focus();
-      textarea.setSelectionRange(pos, pos);
-
-      if (!isKeyboardEvent) {
-        processMouseUp(key);
-      }
       return;
     }
 
@@ -223,12 +163,6 @@ function processKeyPress(key, isKeyboardEvent) {
     }
 
     textarea.textContent = textarea.textContent + symbol;
-    textarea.focus();
-    textarea.setSelectionRange(textarea.textContent.length, textarea.textContent.length);
-    if (!isKeyboardEvent) {
-      console.log("processMouseUp();");
-      processMouseUp(key);
-    }
     //console.log(symbol)
     //console.log(symbol.length);
   }
@@ -433,9 +367,9 @@ function addFourthRowKeys(lang, row) {
   row.append(keyN);
   let keyM = createKey(lang, "KeyM", "ь", "Ь", "Ь", "ь", "m", "M", "M", "m");
   row.append(keyM);
-  let сomma = createKey(lang, "Comma", "б", "Б", "Б", "б", ",", "<", ",", "<");
+  let сomma = createKey(lang, "Comma", "б", "Б", "Б", "б", ",", "&lt;", ",", "&lt;");
   row.append(сomma);
-  let period = createKey(lang, "Period", "ю", "Ю", "Ю", "ю", ".", ">", ".", ">");
+  let period = createKey(lang, "Period", "ю", "Ю", "Ю", "ю", ".", "&gt;", ".", "&gt;");
   row.append(period);
   let slash = createKey(lang, "Slash", ".", ",", ".", ",", "/", "?", "/", "?");
   row.append(slash);
@@ -446,8 +380,8 @@ function addFourthRowKeys(lang, row) {
 }
 
 function addFifthRowKeys(lang, row) {
-  let ControlLeft = createKeyWithSingleValue(lang, "ControlLeft", "Ctrl");
-  row.append(ControlLeft);
+  let ctrlLeft = createKeyWithSingleValue(lang, "ControlLeft", "Ctrl");
+  row.append(ctrlLeft);
   let altLeft = createKeyWithSingleValue(lang, "AltLeft", "Alt");
   row.append(altLeft);
   let space = createKeyWithSingleValue(lang, "Space", " ");
@@ -460,8 +394,8 @@ function addFifthRowKeys(lang, row) {
   row.append(arrowDown);
   let arrowRight = createKeyWithSingleValue(lang, "ArrowRight", "►");
   row.append(arrowRight);
-  let ControlRight = createKeyWithSingleValue(lang, "ControlRight", "Ctrl");
-  row.append(ControlRight);
+  let ctrlRight = createKeyWithSingleValue(lang, "ControlRight", "Ctrl");
+  row.append(ctrlRight);
 }
 
 function createKey(lang, keyClass, ruCaseDown, ruCaseUp, ruCaps, ruShiftCaps,
@@ -515,7 +449,7 @@ function createKeyWithSingleValue(lang, keyClass, value) {
 
 function getenElementsContainer() {
   let container = document.createElement("span");
-  container.classList.add("en"); 
+  container.classList.add("en");
   return container;
 }
 
