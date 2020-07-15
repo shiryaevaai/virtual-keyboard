@@ -32,7 +32,7 @@ window.onload = function () {
 
   keyboard.onmousedown = function (event) {
     let key = event.target.closest(".keyboard-key");
-    if (key !== null) {
+    if (key !== null && key !== undefined) {
       key.style.background = '#de1f1f';
       keysPressedStack.push(key);
     }
@@ -45,7 +45,7 @@ window.onload = function () {
     //}
     let key = keysPressedStack.pop();
     //alert(key.classList);
-    if (key !== null) {
+    if (key !== null && key !== undefined) {
       key.style.background = '';
     }
   };
@@ -59,7 +59,7 @@ window.onload = function () {
 document.addEventListener('keydown', (event) => {
   keysPressed[event.code] = true;
   let key = document.getElementsByClassName(event.code)[0];
-  if (key !== null) {
+  if (key !== null && key !== undefined) {
     key.style.background = '#de1f1f';
     keysPressedStack.push(key);
     processKeyDown(event.code, key);
@@ -71,7 +71,7 @@ document.addEventListener('keydown', (event) => {
 
 document.addEventListener('keyup', (event) => {
   let key = keysPressedStack.pop();
-  if (key !== null) {
+  if (key !== null && key !== undefined) {
     key.style.background = '';
   }
 
@@ -102,7 +102,7 @@ function processKeyUp(code) {
 }
 
 function processKeyPress(key, isKeyboardEvent) {
-  if (key !== null) {
+  if (key !== null && key !== undefined) {
     if (key.classList.contains("Tab") ||
       key.classList.contains("AltRight") ||
       key.classList.contains("AltLeft") ||
@@ -145,6 +145,23 @@ function processKeyPress(key, isKeyboardEvent) {
       notHiddenClass = capsOn ? "caseDown" : "caps";
       key.style.background = capsOn ? '' : '#de1f1f';
       capsOn = !capsOn;
+      return;
+    }
+
+    if (key.classList.contains("Enter")) {
+      let pos = getCaret();
+
+      let str = textarea.textContent;
+      let beforeText = str.substr(0, pos);
+      let afterText = str.substr(pos);
+
+      textarea.textContent = beforeText + '\n' + afterText;
+      textarea.focus();
+      textarea.setSelectionRange(pos, pos);
+
+      if (!isKeyboardEvent) {
+        processMouseUp(key);
+      }
       return;
     }
 
