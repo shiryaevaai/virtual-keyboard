@@ -362,7 +362,7 @@ body {
 }
 
 .header {
-
+	line-height: 3rem;
 }
 
 .hidden {
@@ -394,7 +394,8 @@ header, .text-container, .keyboard-container {
 }
 
 .description-container {
-	font-size: 1.6em;
+	font-size: 1.6rem;
+	line-height: 3rem;
 }
 
 .text-container textarea, .keyboard {
@@ -402,7 +403,7 @@ header, .text-container, .keyboard-container {
 	box-sizing: border-box;
 	width: 710px;
 	height: 251px;
-	font-size: 1.6em;
+	font-size: 1.6rem;
 }
 
 .keyboard {

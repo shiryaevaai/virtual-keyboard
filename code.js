@@ -28,6 +28,7 @@ window.onload = function () {
   addRow(lang, addThirdRowKeys);
   addRow(lang, addFourthRowKeys);
   addRow(lang, addFifthRowKeys);
+  addDescriptionContainer();
 
   keyboard.onmousedown = function (event) {
     let key = event.target.closest(".keyboard-key");
@@ -238,6 +239,14 @@ function addKeyboardContainer() {
   keyboardContainer.classList.add("keyboard-container");
   let wrapper = getWrapper();
   wrapper.append(keyboardContainer);
+}
+
+function addDescriptionContainer() {
+  let descriptionContainer = document.createElement("div");
+  descriptionContainer.innerHTML = "<p>Клавиатура создана в операционной системе Windows</p><p>Для переключения языка комбинация: левыe ctrl + alt</p>";
+  descriptionContainer.classList.add("description-container");
+  let wrapper = getWrapper();
+  wrapper.append(descriptionContainer);
 }
 
 function addRow(lang, addKeys) {
