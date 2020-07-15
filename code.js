@@ -58,7 +58,10 @@ window.onload = function () {
 };
 
 document.addEventListener('keydown', (event) => {
-  event.preventDefault();
+  if (event.code == "Backspace" || event.code == "Delete") {
+    event.preventDefault();
+  }
+
   let key = document.getElementsByClassName(event.code)[0];
   if (key !== null && key !== undefined) {
     key.style.background = '#de1f1f';
@@ -154,6 +157,8 @@ function processKeyPress(key, isKeyboardEvent) {
         let str = textarea.textContent;
         str = str.slice(0, pos - 1) + str.slice(pos);
         textarea.textContent = str;
+        textarea.focus();
+        textarea.setSelectionRange(pos - 1, pos - 1);
       }
 
       if (!isKeyboardEvent) {
@@ -168,6 +173,8 @@ function processKeyPress(key, isKeyboardEvent) {
         let str = textarea.textContent;
         str = str.slice(0, pos) + str.slice(pos + 1);
         textarea.textContent = str;
+        textarea.focus();
+        textarea.setSelectionRange(pos, pos);
       }
 
       if (!isKeyboardEvent) {
