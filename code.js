@@ -408,7 +408,7 @@ function addSecondRowKeys(lang, row) {
 function addThirdRowKeys(lang, row) {
   let capsLock = createKeyWithSingleValue(lang, "CapsLock", "CapsLock");
   row.append(capsLock);
-  let keyA = createKey(lang, "KeyA", "з", "З", "З", "з", "a", "A", "A", "a");
+  let keyA = createKey(lang, "KeyA", "ф", "Ф", "Ф", "ф", "a", "A", "A", "a");
   row.append(keyA);
   let keyS = createKey(lang, "KeyS", "ы", "Ы", "Ы", "ы", "s", "S", "S", "s");
   row.append(keyS);
@@ -451,9 +451,9 @@ function addFourthRowKeys(lang, row) {
   row.append(keyN);
   let keyM = createKey(lang, "KeyM", "ь", "Ь", "Ь", "ь", "m", "M", "M", "m");
   row.append(keyM);
-  let сomma = createKey(lang, "Comma", "б", "Б", "Б", "б", ",", "&lt;", ",", "&lt;");
+  let сomma = createKey(lang, "Comma", "б", "Б", "Б", "б", ",", "<", ",", "<");
   row.append(сomma);
-  let period = createKey(lang, "Period", "ю", "Ю", "Ю", "ю", ".", "&gt;", ".", "&gt;");
+  let period = createKey(lang, "Period", "ю", "Ю", "Ю", "ю", ".", ">", ".", ">");
   row.append(period);
   let slash = createKey(lang, "Slash", ".", ",", ".", ",", "/", "?", "/", "?");
   row.append(slash);
