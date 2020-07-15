@@ -60,11 +60,16 @@ window.onload = function () {
 
 document.addEventListener('keydown', (event) => {
   event.preventDefault();
-  keysPressed[event.code] = true;
+  
   let key = document.getElementsByClassName(event.code)[0];
   if (key !== null && key !== undefined) {
     key.style.background = '#de1f1f';
-    keysPressedStack.push(key);
+
+    if (!this.keysPressed[event.code]) {
+      keysPressedStack.push(key);
+      keysPressed[event.code] = true;
+    }
+
     processKeyDown(event.code, key);
     processKeyPress(key, true);
   }
