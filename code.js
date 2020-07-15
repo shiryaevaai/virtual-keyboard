@@ -143,7 +143,7 @@ function processKeyPress(key, isKeyboardEvent) {
       let pos = getCaret();
       if (pos > 0) {
         let str = textarea.textContent;
-        let temp = str.slice(0, pos);
+        let temp = str.slice(0, pos-1);
         str = temp + str.slice(pos);
         textarea.textContent = str;
         textarea.setSelectionRange(temp.length, temp.length);
