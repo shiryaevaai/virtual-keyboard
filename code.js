@@ -71,18 +71,14 @@ document.addEventListener('keyup', (event) => {
   }
 
   delete this.keysPressed[event.code];
-  processKeyUp(event.code, key);
-
+  processKeyUp(event.code, key);;
 });
 
 function processMouseUp(key) {
-  console.log("processMouseUp");
-  console.log(key);
-  
   if (key !== null && key !== undefined) {
     key.style.background = '';
   }
-  console.log(key);
+  
   processKeyUp(key.classList[1], key);
 };
 
@@ -164,7 +160,7 @@ function processKeyPress(key, isKeyboardEvent) {
 
     if (key.classList.contains("Tab")) {
       let pos = getCaret();
-      console.log(pos);
+      
       let str = textarea.textContent;
       let beforeText = str.substr(0, pos);
       let afterText = str.substr(pos);
@@ -180,7 +176,7 @@ function processKeyPress(key, isKeyboardEvent) {
 
     if (key.classList.contains("Enter")) {
       let pos = getCaret();
-      console.log(pos);
+      
       let str = textarea.textContent;
       let beforeText = str.substr(0, pos);
       let afterText = str.substr(pos);
@@ -209,7 +205,7 @@ function processKeyPress(key, isKeyboardEvent) {
     }
 
     let pos = getCaret();
-    console.log(pos);
+    
     let str = textarea.textContent;
     let beforeText = str.substr(0, pos);
     let afterText = str.substr(pos);
