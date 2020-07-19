@@ -13,7 +13,6 @@ window.onload = function () {
     lang = 'en';
     localStorage.setItem('lang', lang);
   }
-  //alert(lang);
 
   addSection();
   addHeader();
@@ -39,18 +38,6 @@ window.onload = function () {
       processKeyDown(key.classList[1], key);
     }
   };
-
- // keyboard.onmouseup = function (event) {
-    //let target = event.target.closest(".keyboard-key");
-    //if (target !== null) {
-    //  target.style.background = '';
-    //}
-    //let key = keysPressedStack.pop();
-    //alert(key.classList);
-    //if (key !== null && key !== undefined) {
-    //  key.style.background = '';
-    //}
-  //};
 
   keyboard.onmouseup = function (event) {
     let key = keysPressedStack.pop();
@@ -91,10 +78,9 @@ document.addEventListener('keyup', (event) => {
 function processMouseUp(key) {
   console.log("processMouseUp");
   console.log(key);
-  //alert(key.classList);
+  
   if (key !== null && key !== undefined) {
     key.style.background = '';
-    //alert(key.style.background);
   }
   console.log(key);
   processKeyUp(key.classList[1], key);
@@ -116,13 +102,6 @@ function processKeyDown(code, key) {
     switchHiding(notHiddenClass, capsOn ? "shiftCaps" : "caseUp");
     notHiddenClass = capsOn ? "shiftCaps" : "caseUp";
   }
-
-  //if (code == "CapsLock") {
-  //  switchHiding(notHiddenClass, capsOn ? "caseDown" : "caps");
-  //  notHiddenClass = capsOn ? "caseDown" : "caps";
-  //  key.style.background = capsOn ? '' : '#de1f1f';
-  //  capsOn = !capsOn;
-  //}
 }
 
 function processKeyPress(key, isKeyboardEvent) {
@@ -191,7 +170,6 @@ function processKeyPress(key, isKeyboardEvent) {
       let afterText = str.substr(pos);
 
       textarea.textContent = beforeText + "    " + afterText;
-      //textarea.focus();
       let temp = beforeText + "    ";
       textarea.setSelectionRange(temp.length, temp.length);
       if (!isKeyboardEvent) {
@@ -208,7 +186,6 @@ function processKeyPress(key, isKeyboardEvent) {
       let afterText = str.substr(pos);
 
       textarea.textContent = beforeText + '\n' + afterText;
-      //textarea.focus();
       let temp = beforeText + '\n';
       textarea.setSelectionRange(temp.length, temp.length);
 
@@ -227,7 +204,6 @@ function processKeyPress(key, isKeyboardEvent) {
       for (let element of elements) {
         if (!element.classList.contains("hidden")) {
           symbol = element.textContent;
-          //console.log(element.textContent.length);
         }
       }
     }
@@ -241,14 +217,11 @@ function processKeyPress(key, isKeyboardEvent) {
     textarea.textContent = beforeText + symbol + afterText;
     
     let temp = beforeText + symbol;
-    //textarea.focus();
     textarea.setSelectionRange(temp.length, temp.length);
 
     if (!isKeyboardEvent) {
       processMouseUp(key);
     }
-    //console.log(symbol)
-    //console.log(symbol.length);
   }
 }
 
@@ -290,7 +263,6 @@ function checkSwitchLang(event) {
       elementContainer.classList.remove("hidden");
     }
 
-    //console.log(lang);
     localStorage.setItem('lang', lang);
   }
 };
@@ -337,7 +309,6 @@ function addRow(lang, addKeys) {
   let row = document.createElement("div");
   row.classList.add("keyboard-row");
   addKeys(lang, row);
-  //let keyboard = document.getElementsByClassName("keyboard")[0];
   keyboard.append(row);
 }
 
